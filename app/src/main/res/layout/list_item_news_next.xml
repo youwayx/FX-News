@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/list_item_news_next">
+    <TextView
+        android:background="@color/red"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:text="High"
+        android:textSize="30dp"
+        android:fontFamily="sans-serif-condensed"
+        android:id="@+id/list_item_impact_textview" />
+    <LinearLayout
+
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center">
+        <TextView
+            android:text="USD"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="30dp"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/list_item_currency_textview" />
+
+        <TextView
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="12:00pm"
+            android:textSize="16dp"
+            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/list_item_time_textview" />
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="4"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingLeft="2dp"
+        android:paddingRight="2dp"
+        android:text="FOMC Member Kocherlakota Speaks"
+        android:textSize="12dp"
+        android:fontFamily="sans-serif-condensed"
+        android:id="@+id/list_item_name_textview"/>
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="1.8%"
+        android:gravity="center"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="12dp"
+        android:id="@+id/list_item_actual_textview"/>
+    <TextView
+        android:gravity="center"
+        android:text="2.8%"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="12dp"
+        android:id="@+id/list_item_forecast_textview"/>
+    <TextView
+        android:gravity="center"
+
+        android:layout_width="0dp"
+        android:textSize="10dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-condensed"
+        android:id="@+id/list_item_previous_textview"/>
+</LinearLayout>

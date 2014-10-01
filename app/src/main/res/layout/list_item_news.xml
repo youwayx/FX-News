@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:customfont="http://schemas.android.com/apk/res-auto"
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:minHeight="?android:attr/listPreferredItemHeight"
+    android:id="@+id/list_item_news">
+
+    <com.yuweixu.fxnews.Custom.FontTextView
+        customfont:fontName="Raleway-Regular.otf"
+        android:background="@color/red"
+        android:layout_width="40dp"
+        android:layout_height="match_parent"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginRight="8dp"
+        android:gravity="center"
+
+        android:text="New Text"
+        android:fontFamily="sans-serif-condensed"
+        android:id="@+id/list_item_impact_textview" />
+    <LinearLayout
+
+        android:layout_width="36dp"
+        android:layout_height="match_parent"
+
+        android:orientation="vertical"
+        android:gravity="center">
+        <com.yuweixu.fxnews.Custom.FontTextView
+            customfont:fontName="Raleway-Regular.otf"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:fontFamily="sans-serif-condensed"
+            android:textSize="10dp"
+            android:layout_marginBottom="2dp"
+            android:id="@+id/list_item_currency_textview" />
+
+        <com.yuweixu.fxnews.Custom.FontTextView
+            customfont:fontName="Raleway-Regular.otf"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:textSize="8dp"
+            android:fontFamily="sans-serif-condensed"
+            android:id="@+id/list_item_time_textview" />
+    </LinearLayout>
+    <com.yuweixu.fxnews.Custom.FontTextView
+        customfont:fontName="Raleway-Regular.otf"
+        android:layout_width="160dp"
+        android:layout_height="wrap_content"
+        android:paddingLeft="8dp"
+        android:paddingRight="2dp"
+        android:text="Name"
+        android:textSize="10dp"
+        android:id="@+id/list_item_name_textview"/>
+    <com.yuweixu.fxnews.Custom.FontTextView
+        customfont:fontName="Raleway-Regular.otf"
+        android:layout_width="28dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:text="Actual"
+        android:gravity="center"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="8dp"
+        android:id="@+id/list_item_actual_textview"/>
+    <com.yuweixu.fxnews.Custom.FontTextView
+        customfont:fontName="Raleway-Regular.otf"
+        android:gravity="center"
+        android:text="Forecast"
+        android:layout_width="28dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-condensed"
+        android:textSize="8dp"
+        android:id="@+id/list_item_forecast_textview"/>
+    <com.yuweixu.fxnews.Custom.FontTextView
+        customfont:fontName="Raleway-Regular.otf"
+        android:gravity="center"
+
+        android:layout_width="28dp"
+        android:textSize="8dp"
+        android:layout_height="wrap_content"
+        android:layout_weight="1"
+        android:fontFamily="sans-serif-condensed"
+        android:id="@+id/list_item_previous_textview"/>
+
+</LinearLayout>
