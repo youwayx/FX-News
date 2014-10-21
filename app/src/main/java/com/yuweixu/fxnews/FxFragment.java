@@ -1,5 +1,6 @@
 package com.yuweixu.fxnews;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.Typeface;
@@ -16,11 +17,13 @@ import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.yuweixu.fxnews.Custom.NewsCursorAdapter;
@@ -47,7 +50,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
     NewsCursorAdapter mNewsAdapter2;
     MainActivity mainActivity;
     public int LOADER_ID = 0;
-    Typeface ralewayFont;
+    static String [] dates;
     public String [] columns ={
         "NEWS_TABLE."+NewsEntry._ID,
         NewsEntry.COLUMN_DATE,
@@ -58,54 +61,72 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
         NewsEntry.COLUMN_ACTUAL,
         NewsEntry.COLUMN_FORECAST,
         NewsEntry.COLUMN_PREVIOUS};
-    public static String todayDate;
-    public FxFragment() {
 
+    public static String todayDate;
+    public FxFragment(){
+        SimpleDateFormat df = new SimpleDateFormat("MM dd, yyyy");
+        String rawDate = df.format(new Date());
+        todayDate=Utility.formatDateString(rawDate);
+        dates = Utility.getWeekDates(todayDate);
     }
+    public FxFragment(int position, boolean loadPage){
+        SimpleDateFormat df = new SimpleDateFormat("MM dd, yyyy");
+        String rawDate = df.format(new Date());
+        todayDate=Utility.formatDateString(rawDate);
+        dates = Utility.getWeekDates(todayDate);
+        String date = dates[position];
+        Bundle args = new Bundle();
+        args.putString("date", date);
+        args.putBoolean("loadPage",loadPage);
+        setArguments(args);
+    }
+    public static FxFragment create (int position, boolean loadPage){
+        FxFragment fragment = new FxFragment(position, loadPage);
+        String date= "";
+        date = fragment.dates[position];
+        Bundle args = new Bundle();
+        args.putString("date", date);
+        args.putBoolean("loadPage",loadPage);
+        fragment.setArguments(args);
+        return fragment;
+    }
+
     @Override
     public void onStart() {
         super.onStart();
+        boolean loadPage = getArguments().getBoolean("loadPage");
+        String dateUsed = getArguments().getString("date");
+        FetchNewsTask newsTask;
+        if (loadPage){
+            Log.v("testrun", "the web has been scraped");
+            newsTask = new FetchNewsTask(getActivity(),dateUsed, true);
+            newsTask.execute();
+        }
         //getActivity().deleteDatabase("fxnews.db");
 
-        FetchNewsTask newsTask = new FetchNewsTask(getActivity());
-        newsTask.execute();
-
 
     }
 
-    //takes a date in the form of MM dd, yyyy and replaces the month number with its English word
-    public String formatDateString (String date){
-        int monthNumber = (int) Integer.parseInt(date.substring(0,2));
-        String [] months = {"January","February","March","April","May","June","July","August","September","October","November","December"};
-        return months[monthNumber-1]+date.substring(2);
-    }
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        //enables an options menu
-        SimpleDateFormat df = new SimpleDateFormat("MM dd, yyyy");
-        String rawDate = df.format(new Date());
-        todayDate=formatDateString(rawDate);
-        //ralewayFont = MainActivity.font;
 
-        //TextView txt = (TextView) findViewById(R.id.title_textview);
-
-        //txt.setTypeface(font);
+        todayDate = getArguments().getString("date");
         setHasOptionsMenu(true);
-    }
-    public void setTypeFace (TextView textView, Typeface font){
-        if(textView != null) {
-            textView.setTypeface(font);
-        }
     }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
         menuInflater.inflate(R.menu.fxfragment, menu);
     }
     public void update (){
+        boolean loadPage = getArguments().getBoolean("loadPage");
+        String dateUsed = getArguments().getString("date");
+        FetchNewsTask newsTask;
+        if (loadPage){
+            newsTask = new FetchNewsTask(getActivity(),dateUsed, true);
+            newsTask.execute();
+        }
 
-        FetchNewsTask newsTask = new FetchNewsTask(getActivity());
-        newsTask.execute();
     }
 
     @Override
@@ -124,6 +145,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        //getLoaderManager().restartLoader(LOADER_ID,null,this);
         String[] dailyNews = {"4:30am GBP Low Italian Bank Holiday", "5:30am GBP Low French Bank Holiday", "8:30 USD High FOMC Meeting", "9:30 USD High Employment Announcement"};
         List<String> newsList = new ArrayList<String>(Arrays.asList(dailyNews));
 
@@ -176,8 +198,15 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
         View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
         //finds the listView
-        ListView listView = (ListView) rootView.findViewById(R.id.listview_news);
+        final ListView listView = (ListView) rootView.findViewById(R.id.listview_news);
+
+
         listView.setAdapter(mNewsAdapter2);
+        Log.v("testrun","adapter has been set");
+        TextView titleTextView =(TextView) rootView.findViewById(R.id.title_textview);
+        titleTextView.setText(todayDate);
+        //Log.v("Id",mNewsAdapter2.getView(listView)+"");
+
 
         return rootView;
     }
@@ -189,16 +218,23 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
         super.onActivityCreated(savedInstanceState);
-        getLoaderManager().initLoader(LOADER_ID,null,this);
+        getLoaderManager().initLoader(LOADER_ID, null, this);
     }
 
     @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data){
+        mNewsAdapter2.notifyDataSetChanged();
+        super.onActivityResult(requestCode,resultCode,data);
+
+    }
+    @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String sortOrder = NewsEntry.COLUMN_TIME + " ASC";
-        String selection ="(DATE = ?)";
+        String selection =NewsEntry.COLUMN_DATE+" = ?";
         String [] selectionArgs=null;
         if (todayDate!= null){
             selectionArgs=new String [1];
+            todayDate = getArguments().getString("date");
             selectionArgs[0]=todayDate;
             Log.v("sArgs",Arrays.toString(selectionArgs));
         }
@@ -216,11 +252,13 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        mNewsAdapter.swapCursor(data);
+        mNewsAdapter2.swapCursor(data);
+
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-        mNewsAdapter.swapCursor(null);
+
+        mNewsAdapter2.swapCursor(null);
     }
 }

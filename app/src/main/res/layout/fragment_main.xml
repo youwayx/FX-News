@@ -12,18 +12,17 @@
 
     <com.yuweixu.fxnews.Custom.FontTextView
         android:layout_width="wrap_content"
-        android:layout_height="50dp"
-        customfont:fontName="Raleway-Regular.otf"
-        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_height="wrap_content"
+        customfont:fontName="Roboto-Thin.ttf"
+        android:textSize="20dp"
         android:text="@string/todayDate"
         android:id="@+id/title_textview"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="1" />
+        android:layout_marginBottom="15sp"/>
 
     <ListView
 
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/listview_news"
-        android:layout_weight="5" />
+        android:id="@+id/listview_news"/>
 </LinearLayout>

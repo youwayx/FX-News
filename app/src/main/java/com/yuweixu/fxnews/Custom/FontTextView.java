@@ -35,6 +35,7 @@ public class FontTextView extends TextView{
                 Typeface myTypeface = Typeface.createFromAsset(getContext().getAssets(), fontName);
                 setTypeface(myTypeface);
             }
+
             a.recycle();
         }
     }

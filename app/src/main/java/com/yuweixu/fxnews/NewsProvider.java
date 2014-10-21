@@ -30,7 +30,7 @@ public class NewsProvider extends ContentProvider {
     public static int NEWS = 100;
     public static int NEWS_WITH_ID = 101;
     private NewsOpenHelper mOpenHelper;
-public static UriMatcher buildUriMatcher() {
+    public static UriMatcher buildUriMatcher() {
 
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = CONTENT_AUTHORITY;
@@ -70,7 +70,10 @@ public static UriMatcher buildUriMatcher() {
         Log.v("HI","insert has been called");
         SQLiteDatabase db = mOpenHelper.getWritableDatabase();
         Log.v("HI", "db has been found");
-        long id = db.insert(NewsOpenHelper.TABLE_NAME, null, contentValues);
+        long id =-1;
+        if (db!= null && contentValues != null) {
+            id = db.insert(NewsOpenHelper.TABLE_NAME, null, contentValues);
+        }
         Log.v("HI", "inserted");
         Uri returnUri;
 

@@ -24,31 +24,32 @@ import java.util.Arrays;
 public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
     Context mContext;
     static String date;
-    FetchNewsTask (Context context){
-        mContext = context;
+    static boolean isToday,parseNews;
+    public String queryDate;
 
+    FetchNewsTask (Context context,String queryDate,boolean parseNews){
+        mContext = context;
+        this.queryDate = queryDate;
+        this.parseNews=parseNews;
     }
+
     private void addNews(String [] info){
         if (info[4]!=null) {
             Log.v("Insert:", info[4]);
             String a= NewsEntry.COLUMN_NAME + " = '" +info [4]+ "' and "+NewsEntry.COLUMN_DATE + " = '" + info[0]+ "'";
             Log.v("addNews",a);
+
             Cursor nameCursor = mContext.getContentResolver().query(
                     NewsProvider.CONTENT_URI,
                     new String[]{NewsEntry._ID},
-                    NewsEntry.COLUMN_NAME + " = '" +info [4]+ "' and "+NewsEntry.COLUMN_DATE + " = '" + info[0]+ "'",
+                    NewsEntry.COLUMN_NAME + " = '" +info [4]+ "' and "+NewsEntry.COLUMN_DATE + " = '" + info[0]+ "' and "+NewsEntry.COLUMN_ACTUAL +" = '"+info[5]+"'",
+
                     null,
                     null);
 
             if (nameCursor.moveToFirst()) {
-                Log.v("YES", "IT IS IN THE DATABASE");
-                Log.v("THIS IS THE DATA THAT IS STORED",Arrays.toString(info));
             }
             else {
-                Log.v("NOOOO", "ITS NOT IN THE DATABASE, TIME TO INSERT");
-                for (int i=0; i<8; i++){
-                    Log.v("Array", Arrays.toString(info));
-                }
                 ContentValues newsValues = new ContentValues();
                 newsValues.put(NewsEntry.COLUMN_DATE, info[0]);
                 newsValues.put(NewsEntry.COLUMN_TIME, info[1]);
@@ -62,7 +63,7 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
 
                     mContext.getContentResolver().insert(Uri.parse("content://" + "com.yuweixu.fxnews"), newsValues);
                 }
-                Log.v("INSERTED: ", info[4]);
+                //Log.v("INSERTED: ", info[4]);
 
 
 
@@ -75,53 +76,62 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String newsStuff = "";
-        try {
-            //connects to the url
-            URL url = new URL("http://forexfactory.com");
-            urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
-            urlConnection.connect();
+        if (!isToday) {
 
-            InputStream inputStream = urlConnection.getInputStream();
-            StringBuffer buffer = new StringBuffer();
-            if (inputStream == null) {
+            try {
+                //connects to the url
+                String formattedQueryDate = Utility.formatDateForWebQuery(queryDate);
+                String g = "http://forexfactory.com/index.php?day=" + formattedQueryDate;
+                URL url = new URL("http://forexfactory.com/index.php?day=" + formattedQueryDate);
+                Log.v("formatted date", formattedQueryDate);
+                urlConnection = (HttpURLConnection) url.openConnection();
+                urlConnection.setRequestMethod("GET");
+                urlConnection.connect();
+
+                InputStream inputStream = urlConnection.getInputStream();
+                StringBuffer buffer = new StringBuffer();
+                if (inputStream == null) {
+                    return null;
+                }
+                reader = new BufferedReader(new InputStreamReader(inputStream));
+                //reads the page source and stores it in a long string
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    newsStuff += line;
+
+                }
+                if (parseNews) {
+                    ArrayList<String[]> data = parseNews(newsStuff);
+                    Log.v("DATA SIZE IS", "" + data.size());
+                    for (String[] n : data) {
+                        Log.v("name", n[4]);
+                        addNews(n);
+                    }
+                    return data;
+                }
                 return null;
-            }
-            reader = new BufferedReader(new InputStreamReader(inputStream));
-            //reads the page source and stores it in a long string
-            String line;
-            while ((line = reader.readLine()) != null) {
-                newsStuff += line;
-
-            }
-
-            ArrayList<String[]> data = parseNews(newsStuff);
-            Log.v("DATA SIZE IS",""+data.size());
-            for (String [] n: data){
-                Log.v("name",n[4]);
-                addNews(n);
-            }
-            return data;
-//                Log.v("FIRST LINES",newsStuff.substring(100));
-//                for (int i=0; i<data.size(); i++){
-//                    Log.v("DATA IS", Arrays.toString(data.get(i)));
-//                }
-        } catch (IOException e) {
-            Log.v("ERROR", "HTTP CONNECTION NOT MADE");
-            return null;
-        } finally {
-            if (urlConnection != null) {
-                urlConnection.disconnect();
-            }
-            if (reader != null) {
-                try {
-                    reader.close();
-                } catch (final IOException e) {
-                    Log.e("ERROR", "Error closing stream", e);
+                //                Log.v("FIRST LINES",newsStuff.substring(100));
+                //                for (int i=0; i<data.size(); i++){
+                //
+                //  Log.v("DATA IS", Arrays.toString(data.get(i)));
+                //                }
+            } catch (IOException e) {
+                Log.v("ERROR", "HTTP CONNECTION NOT MADE");
+                return null;
+            } finally {
+                if (urlConnection != null) {
+                    urlConnection.disconnect();
+                }
+                if (reader != null) {
+                    try {
+                        reader.close();
+                    } catch (final IOException e) {
+                        Log.e("ERROR", "Error closing stream", e);
+                    }
                 }
             }
         }
-        //return null;
+        return null;
     }
 
     private ArrayList<String[]> parseNews(String source) {
@@ -137,6 +147,7 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
         boolean done = false;
         boolean done2= false;
         date="";
+        String prevTime = "";
         while (true){
             if (source.substring(index2, index2+38).equals("class=\"bginput flexDatePicker\" value=\"")){
                 date = "";
@@ -216,9 +227,13 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
                                 }
                                 index += 20;
                             }
-
+                            else{
+                                time = prevTime;
+                            }
                         }
+
                         newsInfo[1] = time;
+                        prevTime = time;
                         index += 26;
                     }
 

@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
 
     <!-- Base application theme. -->
@@ -5,4 +6,26 @@
         <!-- Customize your theme here. -->
     </style>
 
+    <style name="FxActionTheme" parent="Theme.AppCompat.Light">
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:actionBarTabTextStyle">@style/MyActionBarTabText</item>
+    </style>
+
+    <style name = "MyActionBar" parent = "Widget.AppCompat.ActionBar">
+        <item name="android:background">@color/navy</item>
+        <item name= "android:textColor">@color/white</item>
+        <item name="android:icon">@android:color/transparent</item>
+        <item name = "android:titleTextStyle">@style/MyActionBarTitleText</item>
+
+    </style>
+    <style name="MyActionBarTitleText"
+        parent="@style/TextAppearance.AppCompat.Widget.ActionBar.Title">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:textSize">22sp</item>
+    </style>
+    <style name="MyActionBarTabText"
+        parent="@style/Widget.AppCompat.ActionBar.TabText">
+        <item name="android:textColor">@color/white</item>
+
+    </style>
 </resources>

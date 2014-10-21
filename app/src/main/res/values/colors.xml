@@ -3,4 +3,6 @@
     <color name="red">#FF2400</color>
     <color name="orange">#ffff8f3c</color>
     <color name="yellow">#fffffe1d</color>
+    <color name = "navy">#00006B</color>
+    <color name = "white"> #FFFFFf</color>
 </resources>
