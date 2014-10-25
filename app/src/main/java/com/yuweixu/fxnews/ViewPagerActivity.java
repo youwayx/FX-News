@@ -6,6 +6,7 @@ import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.ActionBarDrawerToggle;
@@ -22,12 +23,17 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.view.animation.DecelerateInterpolator;
+import android.view.animation.Interpolator;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.yuweixu.fxnews.Custom.FixedSpeedScroller;
 import com.yuweixu.fxnews.Custom.TypeFaceSpan;
 
+import java.lang.reflect.Field;
 import java.util.Arrays;
 
 /**
@@ -45,11 +51,16 @@ public class ViewPagerActivity extends FragmentActivity{
     private ViewPager mPager;
     static boolean [] loadPages;
     private PagerAdapter mPagerAdapter;
+    static FxFragment [] fragments;
+    static boolean dontLoadList;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.view_pager);
 
+        super.onCreate(savedInstanceState);
+        //getActionBar().hide();
+
+
+        setContentView(R.layout.view_pager);
         loadPages = new boolean [5];
         for (int i=0; i<5; i++){
             loadPages[i]=true;
@@ -58,9 +69,11 @@ public class ViewPagerActivity extends FragmentActivity{
         mPager = (ViewPager) findViewById(R.id.view_pager);
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
+        fragments = new FxFragment[5];
+
         mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             int positionCurrent;
-            boolean dontLoadList;
+            //boolean dontLoadList;
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 positionCurrent = position;
@@ -73,14 +86,26 @@ public class ViewPagerActivity extends FragmentActivity{
 
             @Override
             public void onPageScrollStateChanged(int state) {
+
+
                 if(state == 0){ // the viewpager is idle as swipping ended
                     new Handler().postDelayed(new Runnable() {
                         public void run() {
-                            if(!dontLoadList){
-                                //async thread code to execute loading the list...
+                            if(!dontLoadList) {
+                                if (fragments[positionCurrent]!=null){
+                                    if (fragments[positionCurrent].loadPage==true) {
+                                        Log.v("loadTextViews","loadPage = true");
+
+                                        fragments[positionCurrent].update();
+
+                                        //[positionCurrent].loadTextViews=false;
+
+                                    }
+
+                                }
                             }
                         }
-                    },200);
+                    },100);
                 }
 
             }
@@ -198,13 +223,18 @@ public class ViewPagerActivity extends FragmentActivity{
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
             Log.v("loadpages", Arrays.toString(loadPages));
-            if (loadPages[position]) {
-                loadPages[position] = false;
-                Log.v("loadpagesNOW","does this even happen");
-                return FxFragment.create(position,true);
+            //return new FxFragment(position);
+
+
+            if (fragments[position]==null){
+                fragments[position]=new FxFragment(position);
+
+                Log.v("this is being called for",position+"");
+                return fragments[position];
             }
             else{
-                return FxFragment.create(position,false);
+
+                return fragments[position];
             }
 
         }

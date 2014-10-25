@@ -1,5 +1,6 @@
 package com.yuweixu.fxnews;
 
+import android.app.Activity;
 import android.content.ContentProvider;
 import android.content.ContentValues;
 import android.content.Context;
@@ -8,6 +9,8 @@ import android.database.CursorIndexOutOfBoundsException;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
+import android.view.View;
+import android.widget.ListView;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -26,8 +29,9 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
     static String date;
     static boolean isToday,parseNews;
     public String queryDate;
-
-    FetchNewsTask (Context context,String queryDate,boolean parseNews){
+    static FxFragment fragment;
+    FetchNewsTask (FxFragment fragment, Activity context,String queryDate,boolean parseNews){
+        this.fragment = fragment;
         mContext = context;
         this.queryDate = queryDate;
         this.parseNews=parseNews;
@@ -42,7 +46,8 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
             Cursor nameCursor = mContext.getContentResolver().query(
                     NewsProvider.CONTENT_URI,
                     new String[]{NewsEntry._ID},
-                    NewsEntry.COLUMN_NAME + " = '" +info [4]+ "' and "+NewsEntry.COLUMN_DATE + " = '" + info[0]+ "' and "+NewsEntry.COLUMN_ACTUAL +" = '"+info[5]+"'",
+                    NewsEntry.COLUMN_NAME + " = '" +info [4]+ "' and "+NewsEntry.COLUMN_DATE + " = '" + info[0]+ "' and "+NewsEntry.COLUMN_ACTUAL +" = '"+info[5]+"' and "
+                            +NewsEntry.COLUMN_CURRENCY +" = '"+ info[2] + "' and "+ NewsEntry.COLUMN_FORECAST+ " = '" + info[6]+ "' and "+NewsEntry.COLUMN_PREVIOUS+" = '"+info[7]+"'",
 
                     null,
                     null);
@@ -63,7 +68,7 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
 
                     mContext.getContentResolver().insert(Uri.parse("content://" + "com.yuweixu.fxnews"), newsValues);
                 }
-                //Log.v("INSERTED: ", info[4]);
+                Log.v("INSERTED: ", info[4]);
 
 
 
@@ -370,5 +375,12 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
             index++;
         }
         return data;
+    }
+    @Override
+    protected void onPostExecute (ArrayList<String[]> a){
+        //fragment.setLoadingPanel(false);
+        //ListView view = mContext.findViewById(R.id.listview_news);
+        mContext.getContentResolver().notifyChange(Uri.parse("content://" + "com.yuweixu.fxnews"),null);
+
     }
 }

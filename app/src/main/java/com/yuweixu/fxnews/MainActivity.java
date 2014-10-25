@@ -34,7 +34,8 @@ public class MainActivity extends ActionBarActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        getActionBar().hide();
+        setContentView(R.layout.start);
         //String date = getStartDate();
         //initializePaging();
         /*if (savedInstanceState == null) {
@@ -50,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
         android.app.ActionBar actionBar = getActionBar();
         actionBar.setTitle(s);
         startActivity(new Intent(MainActivity.this, ViewPagerActivity.class));
-        this.deleteDatabase("fxnews.db");
+        //this.deleteDatabase("fxnews.db");
 
 
        //font = Typeface.createFromAsset(getAssets(), "Raleway-Regular.otf");
