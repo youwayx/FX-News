@@ -12,6 +12,8 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ListView;
 
+import com.firebase.client.Firebase;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,6 +22,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Yuwei on 2014-08-30.
@@ -30,11 +34,15 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
     static boolean isToday,parseNews;
     public String queryDate;
     static FxFragment fragment;
-    FetchNewsTask (FxFragment fragment, Activity context,String queryDate,boolean parseNews){
+    Firebase newsRef;
+    FetchNewsTask (FxFragment fragment, Activity context,String queryDate,boolean parseNews,boolean isToday){
         this.fragment = fragment;
         mContext = context;
         this.queryDate = queryDate;
         this.parseNews=parseNews;
+        this.isToday = isToday;
+        Firebase.setAndroidContext(mContext);
+        newsRef = new Firebase("https://fx-news.firebaseio.com/news");
     }
 
     private void addNews(String [] info){
@@ -42,19 +50,21 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
             Log.v("Insert:", info[4]);
             String a= NewsEntry.COLUMN_NAME + " = '" +info [4]+ "' and "+NewsEntry.COLUMN_DATE + " = '" + info[0]+ "'";
             Log.v("addNews",a);
+//            String formattedQueryDate = Utility.formatDateForWebQuery(queryDate);
+//            Map <String, String> newsData =new HashMap<String,String>();
+//            newsData.put ("time", info[1]);
+//            newsData.put ("currency",info[2]);
+//            newsData.put("impact",info[3]);
 
-            Cursor nameCursor = mContext.getContentResolver().query(
+    //        newsRef.child(queryDate).child(info[4]).setValue(newsData);
+            Cursor testCursor = mContext.getContentResolver().query(
                     NewsProvider.CONTENT_URI,
                     new String[]{NewsEntry._ID},
-                    NewsEntry.COLUMN_NAME + " = '" +info [4]+ "' and "+NewsEntry.COLUMN_DATE + " = '" + info[0]+ "' and "+NewsEntry.COLUMN_ACTUAL +" = '"+info[5]+"' and "
-                            +NewsEntry.COLUMN_CURRENCY +" = '"+ info[2] + "' and "+ NewsEntry.COLUMN_FORECAST+ " = '" + info[6]+ "' and "+NewsEntry.COLUMN_PREVIOUS+" = '"+info[7]+"'",
-
+                    NewsEntry.COLUMN_NAME + " = '" +info [4]+ "' and "+NewsEntry.COLUMN_DATE + " = '" + info[0]+ "' and "
+                            +NewsEntry.COLUMN_CURRENCY +" = '"+ info[2] + "'",
                     null,
                     null);
-
-            if (nameCursor.moveToFirst()) {
-            }
-            else {
+            if (!testCursor.moveToFirst()){
                 ContentValues newsValues = new ContentValues();
                 newsValues.put(NewsEntry.COLUMN_DATE, info[0]);
                 newsValues.put(NewsEntry.COLUMN_TIME, info[1]);
@@ -69,10 +79,41 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
                     mContext.getContentResolver().insert(Uri.parse("content://" + "com.yuweixu.fxnews"), newsValues);
                 }
                 Log.v("INSERTED: ", info[4]);
-
-
-
             }
+
+            else{
+                Cursor nameCursor = null;
+                if (testCursor.moveToFirst()) {
+                    nameCursor = mContext.getContentResolver().query(
+                            NewsProvider.CONTENT_URI,
+                            new String[]{NewsEntry._ID},
+                            NewsEntry.COLUMN_NAME + " = '" + info[4] + "' and " + NewsEntry.COLUMN_DATE + " = '" + info[0] + "' and " + NewsEntry.COLUMN_ACTUAL + " = '" + info[5] + "' and "
+                                    + NewsEntry.COLUMN_CURRENCY + " = '" + info[2] + "' and " + NewsEntry.COLUMN_FORECAST + " = '" + info[6] + "' and " + NewsEntry.COLUMN_PREVIOUS + " = '" + info[7] + "'",
+                            null,
+                            null);
+                }
+                if (!nameCursor.moveToFirst()) {
+                    ContentValues newsValues = new ContentValues();
+                    newsValues.put(NewsEntry.COLUMN_DATE, info[0]);
+                    newsValues.put(NewsEntry.COLUMN_TIME, info[1]);
+                    newsValues.put(NewsEntry.COLUMN_CURRENCY, info[2]);
+                    newsValues.put(NewsEntry.COLUMN_IMPACT, info[3]);
+                    newsValues.put(NewsEntry.COLUMN_NAME, info[4]);
+                    newsValues.put(NewsEntry.COLUMN_ACTUAL, info[5]);
+                    newsValues.put(NewsEntry.COLUMN_FORECAST, info[6]);
+                    newsValues.put(NewsEntry.COLUMN_PREVIOUS, info[7]);
+                    if (newsValues != null) {
+
+                        mContext.getContentResolver().update(
+                                NewsProvider.CONTENT_URI,
+                                newsValues,
+                                NewsEntry.COLUMN_NAME + " = '" + info[4] + "' and " + NewsEntry.COLUMN_DATE + " = '" + info[0] + "' and "
+                                        + NewsEntry.COLUMN_CURRENCY + " = '" + info[2] + "'",
+                                null);
+                    }
+                }
+            }
+
         }
     }
     @Override
@@ -349,9 +390,10 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
                         }
                     }
                     else{
-                        for (int i=0; i<50; i++){
+                        for (int i=0; i<70; i++){
                             if (source.charAt(index+21+i)=='>'){
                                 index=index+21+i;
+                                break;
                             }
                         }
                         for (int j=0; j<10; j++){

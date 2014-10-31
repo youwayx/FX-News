@@ -70,6 +70,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
     public static ViewPagerActivity activity;
     static boolean showPanel = true;
     static boolean loadTextViews = false;
+    static boolean isToday;
     public FxFragment(){
         SimpleDateFormat df = new SimpleDateFormat("MM dd, yyyy");
         String rawDate = df.format(new Date());
@@ -87,6 +88,12 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
         args.putString("date", date);
         loadPage= true;
         setArguments(args);
+        if (position ==0){
+            isToday = true;
+        }
+        else{
+            isToday = false;
+        }
     }
     /*
     public static FxFragment create (int position){
@@ -111,7 +118,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
        FetchNewsTask newsTask;
         if (loadPage){
 
-            newsTask = new FetchNewsTask(this, getActivity(),dateUsed, true);
+            newsTask = new FetchNewsTask(this, getActivity(),dateUsed, true,isToday);
             newsTask.execute();
             Log.v("testrun", "the web has been scraped"+todayDate);
             loadPage=false;
@@ -136,7 +143,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
         if (loadPage) {
             String dateUsed = getArguments().getString("date");
             FetchNewsTask newsTask;
-            newsTask = new FetchNewsTask(this, getActivity(), dateUsed, true);
+            newsTask = new FetchNewsTask(this, getActivity(), dateUsed, true,isToday);
             newsTask.execute();
             loadPage=false;
         }
@@ -144,7 +151,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
     public void refresh (){
         String dateUsed = getArguments().getString("date");
         FetchNewsTask newsTask;
-        newsTask = new FetchNewsTask(this, getActivity(), dateUsed, true);
+        newsTask = new FetchNewsTask(this, getActivity(), dateUsed, true,isToday);
         newsTask.execute();
     }
 
@@ -273,15 +280,15 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
             todayDate = getArguments().getString("date");
             selectionArgs[0]=todayDate;
         }
-
+        Uri queryUri = Uri.parse("content://com.yuweixu.fxnews");
         //String [] a={"September 23, 2014"};
         return new CursorLoader(
                 getActivity(),
-                Uri.parse("content://com.yuweixu.fxnews"),
-                        columns,
-                        selection,
-                        selectionArgs,
-                        null
+                queryUri,
+                columns,
+                selection,
+                selectionArgs,
+                null
                 );
     }
 

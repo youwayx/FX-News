@@ -30,11 +30,17 @@ import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 import com.yuweixu.fxnews.Custom.FixedSpeedScroller;
 import com.yuweixu.fxnews.Custom.TypeFaceSpan;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by Yuwei on 2014-10-06.
@@ -58,6 +64,45 @@ public class ViewPagerActivity extends FragmentActivity{
 
         super.onCreate(savedInstanceState);
         //getActionBar().hide();
+//        Firebase.setAndroidContext(this);
+//        Firebase rootRef = new Firebase("https://fx-news.firebaseio.com/");
+//        Firebase newsRef = rootRef.child ("news");
+//        Map<String, String> newsData = new HashMap<String, String>();
+//        newsData.put("currency","USD");
+//        newsData.put("name","FOMC meeting minutes");
+//
+//        newsRef.addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onCancelled(FirebaseError firebaseError) {
+//
+//            }
+//
+//            // Retrieve new posts as they are added to Firebase
+//            @Override
+//            public void onChildAdded(DataSnapshot snapshot, String previousChildName) {
+//                Map<String,String> node = (Map <String,String>) snapshot.child("October 30, 2014").child("Fed Chair Yellen Speaks").getValue();
+//                Log.v("firebase",node.get("currency"));
+//            }
+//
+//            @Override
+//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+//
+//            }
+//
+//            @Override
+//            public void onChildRemoved(DataSnapshot snapshot) {
+//
+//            }
+//            //... ChildEventListener also defines onChildChanged, onChildRemoved,
+//            //    onChildMoved and onCanceled, covered in later sections.
+//        });
+        //newsRef.child("Nov 2, 2014").setValue(newsData);
+        Log.v("firebase", "hi");
 
 
         setContentView(R.layout.view_pager);

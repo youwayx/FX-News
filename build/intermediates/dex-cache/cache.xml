@@ -2,16 +2,52 @@
 <pre-dex-items>
 
     <item
-        dex="C:\Users\Yuwei\AndroidStudioProjects\FXNews2\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0-a8b01be985ddc833ce6ba7a4bf13ef8a54893921.jar"
-        jar="C:\Users\Yuwei\AppData\Local\Android\android-studio\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        dex="C:\Users\Yuwei\AndroidStudioProjects\FXNews2\app\build\intermediates\pre-dexed\debug\firebase-client-jvm-1.1.1-4c236f12a945ec1d9026a97b3effc57d079d1d88.jar"
+        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-jvm\1.1.1\54eb629aa229b4758345c02bfa02eb8306c750da\firebase-client-jvm-1.1.1.jar"
         jumboMode="false"
         revision="20.0.0"
-        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+        sha1="54eb629aa229b4758345c02bfa02eb8306c750da"/>
     <item
         dex="C:\Users\Yuwei\AndroidStudioProjects\FXNews2\app\build\intermediates\pre-dexed\debug\classes-da7e292ee3a039158b7230f919e97df0179937a3.jar"
         jar="C:\Users\Yuwei\AndroidStudioProjects\FXNews2\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.1.0\classes.jar"
         jumboMode="false"
         revision="20.0.0"
         sha1="3499ceba05ca1f6037c6a2fad73df8f636224a28"/>
+    <item
+        dex="C:\Users\Yuwei\AndroidStudioProjects\FXNews2\app\build\intermediates\pre-dexed\debug\firebase-client-android-1.1.1-c5752022d19bd74896d369542329a9ee1a87b37a.jar"
+        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.firebase\firebase-client-android\1.1.1\55312fdeb0b1db91c107c6679d7cf7b347515d50\firebase-client-android-1.1.1.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="55312fdeb0b1db91c107c6679d7cf7b347515d50"/>
+    <item
+        dex="C:\Users\Yuwei\AndroidStudioProjects\FXNews2\app\build\intermediates\pre-dexed\debug\jackson-annotations-2.2.2-4b16baa1bd13abc6f623e14d0d0068a2b1582567.jar"
+        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.2.2\285cb9c666f0f0f3dd8a1be04e1f457eb7b15113\jackson-annotations-2.2.2.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="285cb9c666f0f0f3dd8a1be04e1f457eb7b15113"/>
+    <item
+        dex="C:\Users\Yuwei\AndroidStudioProjects\FXNews2\app\build\intermediates\pre-dexed\debug\jackson-databind-2.2.2-24c20a37448e8824fd3abd23dda5e242266aaf74.jar"
+        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6"/>
+    <item
+        dex="C:\Users\Yuwei\AndroidStudioProjects\FXNews2\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0-a8b01be985ddc833ce6ba7a4bf13ef8a54893921.jar"
+        jar="C:\Users\Yuwei\AppData\Local\Android\android-studio\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
+    <item
+        dex="C:\Users\Yuwei\AndroidStudioProjects\FXNews2\app\build\intermediates\pre-dexed\debug\jackson-core-2.2.2-db965e2a2ee8959d18e6c30cff5ca8f9976e38d9.jar"
+        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b"/>
+    <item
+        dex="C:\Users\Yuwei\AndroidStudioProjects\FXNews2\app\build\intermediates\pre-dexed\debug\tubesock-0.0.9-b767a1fbbd256bdd95b4f97096e4e89fa24fa6a8.jar"
+        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.firebase\tubesock\0.0.9\c1f56c0f1a75ced73ad50c47fb3f702009e3960a\tubesock-0.0.9.jar"
+        jumboMode="false"
+        revision="20.0.0"
+        sha1="c1f56c0f1a75ced73ad50c47fb3f702009e3960a"/>
 
 </pre-dex-items>
