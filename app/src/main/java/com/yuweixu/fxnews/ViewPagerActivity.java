@@ -35,9 +35,11 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 import com.yuweixu.fxnews.Custom.FixedSpeedScroller;
+import com.yuweixu.fxnews.Custom.NewsArrayAdapter;
 import com.yuweixu.fxnews.Custom.TypeFaceSpan;
 
 import java.lang.reflect.Field;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -50,6 +52,7 @@ public class ViewPagerActivity extends FragmentActivity{
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
+
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
@@ -59,10 +62,12 @@ public class ViewPagerActivity extends FragmentActivity{
     private PagerAdapter mPagerAdapter;
     static FxFragment [] fragments;
     static boolean dontLoadList;
+    Context context = this;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+
         //getActionBar().hide();
 //        Firebase.setAndroidContext(this);
 //        Firebase rootRef = new Firebase("https://fx-news.firebaseio.com/");
@@ -268,17 +273,23 @@ public class ViewPagerActivity extends FragmentActivity{
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
             Log.v("loadpages", Arrays.toString(loadPages));
-            //return new FxFragment(position);
+            /*if(loadPages[position] == true){
+                return new FxFragment(position,context,false);
+            }
+            else{
+                return new FxFragment(position,context,false);
+            }*/
+
 
 
             if (fragments[position]==null){
-                fragments[position]=new FxFragment(position);
+                fragments[position]=new FxFragment(position,context,false);
 
                 Log.v("this is being called for",position+"");
                 return fragments[position];
             }
             else{
-
+                fragments[position].setLoadPage(false);
                 return fragments[position];
             }
 

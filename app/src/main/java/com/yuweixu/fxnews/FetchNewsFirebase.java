@@ -1,16 +1,8 @@
 package com.yuweixu.fxnews;
 
-import android.app.Activity;
-import android.content.ContentProvider;
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
-import android.database.CursorIndexOutOfBoundsException;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.view.View;
-import android.widget.ListView;
 
 import com.firebase.client.Firebase;
 
@@ -26,197 +18,111 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Created by Yuwei on 2014-08-30.
+ * Created by Yuwei on 2014-11-02.
  */
-public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
+public class FetchNewsFirebase extends AsyncTask<Void, Void, Void> {
     Context mContext;
-    static String date;
-    static boolean isToday,parseNews;
-    public String queryDate;
-    static FxFragment fragment;
-    Firebase newsRef;
-    FetchNewsTask (FxFragment fragment, Activity context,String queryDate,boolean parseNews,boolean isToday){
-        this.fragment = fragment;
+    String queryDate;
+    boolean parseNews;
+    Firebase newsBase;
+    public FetchNewsFirebase(Context context,String queryDate, boolean parseNews){
+        this.queryDate= queryDate;
         mContext = context;
-        this.queryDate = queryDate;
-        this.parseNews=parseNews;
-        this.isToday = isToday;
+        this.parseNews= parseNews;
         Firebase.setAndroidContext(mContext);
-        newsRef = new Firebase("https://fx-news.firebaseio.com/news");
+        newsBase = new Firebase("https://fx-news.firebaseio.com/news");
+
     }
-
-    private void addNews(String [] info){
-        if (isToday) {
-            if (info[4] != null) {
-                Log.v("Insert:", info[4]);
-                String a = NewsEntry.COLUMN_NAME + " = '" + info[4] + "' and " + NewsEntry.COLUMN_DATE + " = '" + info[0] + "'";
-                Log.v("addNews", a);
-                //            String formattedQueryDate = Utility.formatDateForWebQuery(queryDate);
-                //            Map <String, String> newsData =new HashMap<String,String>();
-                //            newsData.put ("time", info[1]);
-                //            newsData.put ("currency",info[2]);
-                //            newsData.put("impact",info[3]);
-
-                //        newsRef.child(queryDate).child(info[4]).setValue(newsData);
-                Cursor testCursor = mContext.getContentResolver().query(
-                        NewsProvider.CONTENT_URI,
-                        new String[]{NewsEntry._ID},
-                        NewsEntry.COLUMN_NAME + " = '" + info[4] + "' and " + NewsEntry.COLUMN_DATE + " = '" + info[0] + "' and "
-                                + NewsEntry.COLUMN_CURRENCY + " = '" + info[2] + "'",
-                        null,
-                        null);
-                if (!testCursor.moveToFirst()) {
-                    ContentValues newsValues = new ContentValues();
-                    newsValues.put(NewsEntry.COLUMN_DATE, info[0]);
-                    newsValues.put(NewsEntry.COLUMN_TIME, info[1]);
-                    newsValues.put(NewsEntry.COLUMN_CURRENCY, info[2]);
-                    newsValues.put(NewsEntry.COLUMN_IMPACT, info[3]);
-                    newsValues.put(NewsEntry.COLUMN_NAME, info[4]);
-                    newsValues.put(NewsEntry.COLUMN_ACTUAL, info[5]);
-                    newsValues.put(NewsEntry.COLUMN_FORECAST, info[6]);
-                    newsValues.put(NewsEntry.COLUMN_PREVIOUS, info[7]);
-                    if (newsValues != null) {
-
-                        mContext.getContentResolver().insert(Uri.parse("content://" + "com.yuweixu.fxnews"), newsValues);
-                    }
-                    Log.v("INSERTED: ", info[4]);
-                } else {
-                    Cursor nameCursor = null;
-                    if (testCursor.moveToFirst()) {
-                        nameCursor = mContext.getContentResolver().query(
-                                NewsProvider.CONTENT_URI,
-                                new String[]{NewsEntry._ID},
-                                NewsEntry.COLUMN_NAME + " = '" + info[4] + "' and " + NewsEntry.COLUMN_DATE + " = '" + info[0] + "' and " + NewsEntry.COLUMN_ACTUAL + " = '" + info[5] + "' and "
-                                        + NewsEntry.COLUMN_CURRENCY + " = '" + info[2] + "' and " + NewsEntry.COLUMN_FORECAST + " = '" + info[6] + "' and " + NewsEntry.COLUMN_PREVIOUS + " = '" + info[7] + "'",
-                                null,
-                                null);
-                    }
-                    if (!nameCursor.moveToFirst()) {
-                        ContentValues newsValues = new ContentValues();
-                        newsValues.put(NewsEntry.COLUMN_DATE, info[0]);
-                        newsValues.put(NewsEntry.COLUMN_TIME, info[1]);
-                        newsValues.put(NewsEntry.COLUMN_CURRENCY, info[2]);
-                        newsValues.put(NewsEntry.COLUMN_IMPACT, info[3]);
-                        newsValues.put(NewsEntry.COLUMN_NAME, info[4]);
-                        newsValues.put(NewsEntry.COLUMN_ACTUAL, info[5]);
-                        newsValues.put(NewsEntry.COLUMN_FORECAST, info[6]);
-                        newsValues.put(NewsEntry.COLUMN_PREVIOUS, info[7]);
-                        if (newsValues != null) {
-                            mContext.getContentResolver().insert(Uri.parse("content://" + "com.yuweixu.fxnews"), newsValues);
-                        }
-                    }
-                }
-            }
-        }
-        else{
-            Cursor nameCursor = null;
-            nameCursor = mContext.getContentResolver().query(
-                    NewsProvider.CONTENT_URI,
-                    new String[]{NewsEntry._ID},
-                    NewsEntry.COLUMN_NAME + " = '" + info[4] + "' and " + NewsEntry.COLUMN_DATE + " = '" + info[0] + "' and " + NewsEntry.COLUMN_ACTUAL + " = '" + info[5] + "' and "
-                            + NewsEntry.COLUMN_CURRENCY + " = '" + info[2] + "' and " + NewsEntry.COLUMN_FORECAST + " = '" + info[6] + "' and " + NewsEntry.COLUMN_PREVIOUS + " = '" + info[7] + "'",
-                    null,
-                    null);
-
-            if (!nameCursor.moveToFirst()) {
-                ContentValues newsValues = new ContentValues();
-                newsValues.put(NewsEntry.COLUMN_DATE, info[0]);
-                newsValues.put(NewsEntry.COLUMN_TIME, info[1]);
-                newsValues.put(NewsEntry.COLUMN_CURRENCY, info[2]);
-                newsValues.put(NewsEntry.COLUMN_IMPACT, info[3]);
-                newsValues.put(NewsEntry.COLUMN_NAME, info[4]);
-                newsValues.put(NewsEntry.COLUMN_ACTUAL, info[5]);
-                newsValues.put(NewsEntry.COLUMN_FORECAST, info[6]);
-                newsValues.put(NewsEntry.COLUMN_PREVIOUS, info[7]);
-                if (newsValues != null) {
-
-                    mContext.getContentResolver().update(
-                            NewsProvider.CONTENT_URI,
-                            newsValues,
-                            NewsEntry.COLUMN_NAME + " = '" + info[4] + "' and " + NewsEntry.COLUMN_DATE + " = '" + info[0] + "' and "
-                                    + NewsEntry.COLUMN_CURRENCY + " = '" + info[2] + "'",
-                            null);
-                }
-            }
-        }
+    public void addNews (String [] info){
+        Map newsValues= new HashMap<String,String>();
+        newsValues.put(NewsEntry.COLUMN_DATE, info[1]);
+        newsValues.put(NewsEntry.COLUMN_TIME, info[2]);
+        newsValues.put(NewsEntry.COLUMN_CURRENCY, info[3]);
+        newsValues.put(NewsEntry.COLUMN_IMPACT, info[4]);
+        newsValues.put(NewsEntry.COLUMN_NAME, info[5]);
+        newsValues.put(NewsEntry.COLUMN_ACTUAL, info[6]);
+        newsValues.put(NewsEntry.COLUMN_FORECAST, info[7]);
+        newsValues.put(NewsEntry.COLUMN_PREVIOUS, info[8]);
+        newsBase.child(queryDate).child(info[0]).setValue(newsValues);
     }
     @Override
-    protected ArrayList<String[]> doInBackground(Void... params) {
+    protected Void doInBackground(Void... params) {
         Log.v("HI", "doInBackground started");
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
         String newsStuff = "";
-        if (!isToday) {
+        try {
+            //connects to the url
+            String formattedQueryDate = Utility.formatDateForWebQuery(queryDate);
+            String g = "http://forexfactory.com/index.php?day=" + formattedQueryDate;
+            URL url = new URL("http://forexfactory.com/index.php?day=" + formattedQueryDate);
+            Log.v("formatted date", formattedQueryDate);
+            urlConnection = (HttpURLConnection) url.openConnection();
+            urlConnection.setRequestMethod("GET");
+            urlConnection.connect();
 
-            try {
-                //connects to the url
-                String formattedQueryDate = Utility.formatDateForWebQuery(queryDate);
-                String g = "http://forexfactory.com/index.php?day=" + formattedQueryDate;
-                URL url = new URL("http://forexfactory.com/index.php?day=" + formattedQueryDate);
-                Log.v("formatted date", formattedQueryDate);
-                urlConnection = (HttpURLConnection) url.openConnection();
-                urlConnection.setRequestMethod("GET");
-                urlConnection.connect();
-
-                InputStream inputStream = urlConnection.getInputStream();
-                StringBuffer buffer = new StringBuffer();
-                if (inputStream == null) {
-                    return null;
-                }
-                reader = new BufferedReader(new InputStreamReader(inputStream));
-                //reads the page source and stores it in a long string
-                String line;
-                while ((line = reader.readLine()) != null) {
-                    newsStuff += line;
-
-                }
-                if (parseNews) {
-                    ArrayList<String[]> data = parseNews(newsStuff);
-                    Log.v("DATA SIZE IS", "" + data.size());
-                    for (String[] n : data) {
-                        Log.v("name", n[4]);
-                        addNews(n);
-                    }
-                    return data;
-                }
+            InputStream inputStream = urlConnection.getInputStream();
+            StringBuffer buffer = new StringBuffer();
+            if (inputStream == null) {
                 return null;
-                //                Log.v("FIRST LINES",newsStuff.substring(100));
-                //                for (int i=0; i<data.size(); i++){
-                //
-                //  Log.v("DATA IS", Arrays.toString(data.get(i)));
-                //                }
-            } catch (IOException e) {
-                Log.v("ERROR", "HTTP CONNECTION NOT MADE");
-                return null;
-            } finally {
-                if (urlConnection != null) {
-                    urlConnection.disconnect();
-                }
-                if (reader != null) {
-                    try {
-                        reader.close();
-                    } catch (final IOException e) {
-                        Log.e("ERROR", "Error closing stream", e);
+            }
+            reader = new BufferedReader(new InputStreamReader(inputStream));
+            //reads the page source and stores it in a long string
+            String line;
+            while ((line = reader.readLine()) != null) {
+                newsStuff += line;
+
+            }
+            if (parseNews) {
+                ArrayList<String[]> data = parseNews(newsStuff);
+
+                for (int i=0; i<data.size(); i++) {
+                    String [] newsInfo = new String [9];
+                    newsInfo [0] = i+"";
+                    String [] news = data.get(i);
+                    for (int j=0; j<8; j++){
+                        newsInfo[j+1]= news[j];
                     }
+                    addNews(newsInfo);
+                }
+
+            }
+            return null;
+            //                Log.v("FIRST LINES",newsStuff.substring(100));
+            //                for (int i=0; i<data.size(); i++){
+            //
+            //  Log.v("DATA IS", Arrays.toString(data.get(i)));
+            //                }
+        } catch (IOException e) {
+            Log.v("ERROR", "HTTP CONNECTION NOT MADE");
+            return null;
+        } finally {
+            if (urlConnection != null) {
+                urlConnection.disconnect();
+            }
+            if (reader != null) {
+                try {
+                    reader.close();
+                } catch (final IOException e) {
+                    Log.e("ERROR", "Error closing stream", e);
                 }
             }
         }
-        return null;
-    }
 
+    }
     private ArrayList<String[]> parseNews(String source) {
 
         //finding date -- bginput flexDatePicker
         ArrayList<String[]> data = new ArrayList<String[]>();
         String key = "td class=\"time\"";
         String endKey = "More";
-        int index = 19500;
+        int index = 20000;
         int index2 = 2500;
         String[] newsInfo = new String[8];
         boolean flag = false;
         boolean done = false;
         boolean done2= false;
-        date="";
+        String date="";
         String prevTime = "";
         while (true){
             if (source.substring(index2, index2+38).equals("class=\"bginput flexDatePicker\" value=\"")){
@@ -242,8 +148,8 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
         }
 
 
-         while (true) {
-                if (done) {
+        while (true) {
+            if (done) {
                 Log.v("DONE", "DONEEEEEE");
                 break;
             }
@@ -434,6 +340,7 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
                     flag = false;
                     Log.v("DATA:", Arrays.toString(newsInfo));
                     data.add(newsInfo);
+                    Log.v("indices",index+" "+index2);
                 }
 
             }
@@ -441,12 +348,5 @@ public class FetchNewsTask extends AsyncTask<Void, Void, ArrayList<String[]>> {
             index++;
         }
         return data;
-    }
-    @Override
-    protected void onPostExecute (ArrayList<String[]> a){
-        //fragment.setLoadingPanel(false);
-        //ListView view = mContext.findViewById(R.id.listview_news);
-        mContext.getContentResolver().notifyChange(Uri.parse("content://" + "com.yuweixu.fxnews"),null);
-
     }
 }

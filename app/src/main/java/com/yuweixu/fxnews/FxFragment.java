@@ -30,6 +30,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.firebase.client.ChildEventListener;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.yuweixu.fxnews.Custom.NewsArrayAdapter;
 import com.yuweixu.fxnews.Custom.NewsCursorAdapter;
 
 import org.apache.http.HttpConnection;
@@ -45,12 +50,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Yuwei on 2014-08-07.
  */
-public class FxFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
-    SimpleCursorAdapter mNewsAdapter;
+public class FxFragment extends Fragment{
+
     NewsCursorAdapter mNewsAdapter2;
     MainActivity mainActivity;
     public int LOADER_ID = 0;
@@ -71,13 +78,20 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
     static boolean showPanel = true;
     static boolean loadTextViews = false;
     static boolean isToday;
+    Context mContext;
+    Firebase newsBase;
+    ArrayList<Map<String,String>> mData;
+    NewsArrayAdapter mNewsAdapter;
+    static ConcurrentHashMap<String, Object> mMemoryCache;
     public FxFragment(){
         SimpleDateFormat df = new SimpleDateFormat("MM dd, yyyy");
         String rawDate = df.format(new Date());
         todayDate=Utility.formatDateString(rawDate);
         dates = Utility.getWeekDates(todayDate);
+
     }
-    public FxFragment(int position){
+    public FxFragment(int position,Context mContext,boolean loadPage){
+        this.mContext= mContext;
         SimpleDateFormat df = new SimpleDateFormat("MM dd, yyyy");
         String rawDate = df.format(new Date());
         todayDate=Utility.formatDateString(rawDate);
@@ -86,7 +100,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
         Bundle args = new Bundle();
         Log.v("testrun",dates[position]);
         args.putString("date", date);
-        loadPage= true;
+        loadPage= false;
         setArguments(args);
         if (position ==0){
             isToday = true;
@@ -94,17 +108,54 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
         else{
             isToday = false;
         }
+        Firebase.setAndroidContext(mContext);
+        newsBase = new Firebase("https://fx-news.firebaseio.com/news/"+date);
+        mData = new ArrayList<Map<String, String>>();
+        mMemoryCache = new ConcurrentHashMap<String, Object>();
+        Object thing =mMemoryCache.get("ArrayList");
+        if (thing!= null){
+            mData = (ArrayList<Map<String,String>>) thing;
+
+        }
+        else{
+            mMemoryCache.put("ArrayList",mData);
+        }
+        Log.v("data size right now is",mData.size()+"");
+        if(mData.size()==0) {
+            newsBase.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                    Log.v("is this happening", "yes");
+                    Map<String, String> data = (Map<String, String>) dataSnapshot.getValue();
+                    mData.add(data);
+                    mNewsAdapter.notifyDataSetChanged();
+
+                }
+
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
+        }
+        mMemoryCache.put("ArrayList",mData);
     }
-    /*
-    public static FxFragment create (int position){
-        FxFragment fragment = new FxFragment(position);
-        String date= "";
-        date = fragment.dates[position];
-        Bundle args = new Bundle();
-        args.putString("date", date);
-        fragment.setArguments(args);
-        return fragment;
-    }*/
+
     public void setLoadPage(boolean b){
         loadPage=b;
     }
@@ -115,10 +166,10 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
     public void onStart() {
         super.onStart();
         String dateUsed = getArguments().getString("date");
-       FetchNewsTask newsTask;
+       FetchNewsFirebase newsTask;
         if (loadPage){
 
-            newsTask = new FetchNewsTask(this, getActivity(),dateUsed, true,isToday);
+            newsTask = new FetchNewsFirebase(getActivity(), dateUsed, true);
             newsTask.execute();
             Log.v("testrun", "the web has been scraped"+todayDate);
             loadPage=false;
@@ -142,16 +193,16 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
     public void update (){
         if (loadPage) {
             String dateUsed = getArguments().getString("date");
-            FetchNewsTask newsTask;
-            newsTask = new FetchNewsTask(this, getActivity(), dateUsed, true,isToday);
+            FetchNewsFirebase newsTask;
+            newsTask = new FetchNewsFirebase(getActivity(), dateUsed, true);
             newsTask.execute();
             loadPage=false;
         }
     }
     public void refresh (){
         String dateUsed = getArguments().getString("date");
-        FetchNewsTask newsTask;
-        newsTask = new FetchNewsTask(this, getActivity(), dateUsed, true,isToday);
+        FetchNewsFirebase newsTask;
+        newsTask = new FetchNewsFirebase(getActivity(), dateUsed, true);
         newsTask.execute();
     }
 
@@ -174,8 +225,17 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
         //getLoaHandler derManager().restartLoader(LOADER_ID,null,this);
         String[] dailyNews = {"4:30am GBP Low Italian Bank Holiday", "5:30am GBP Low French Bank Holiday", "8:30 USD High FOMC Meeting", "9:30 USD High Employment Announcement"};
         List<String> newsList = new ArrayList<String>(Arrays.asList(dailyNews));
+        Log.v("SIZE MDATA",mData.size()+"");
+        String dateUsed = getArguments().getString("date");
 
-            mNewsAdapter2 = new NewsCursorAdapter(getActivity(), null,0);
+
+        if(mData.size()>0) {
+            Log.v("firebasedata", mData.get(0).get("DATE"));
+        }
+
+
+
+         //   mNewsAdapter2 = new NewsCursorAdapter(getActivity(), null,0);
         /*mNewsAdapter = new SimpleCursorAdapter(
                 getActivity(),
                 R.layout.list_item_news,
@@ -202,28 +262,10 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
                 0
         );*/
 
-        /*mNewsAdapter.setViewBinder (new SimpleCursorAdapter.ViewBinder(){
-            public boolean setViewValue(View view, Cursor cursor, int columnIndex){
-                if (columnIndex == cursor.getColumnIndex(NewsEntry.COLUMN_IMPACT)) {
-
-                    String impactValue = cursor.getString(columnIndex);
-
-                    if (((TextView)view).getText().toString().equals("Low")) {
-                        ((TextView) view).setBackgroundColor(Color.YELLOW);
-
-                    }
-                    return true;
-                }
-
-
-
-                return false;
-            }
-        });*/
 
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-
+        mNewsAdapter = new NewsArrayAdapter(mContext,R.layout.list_item_news,mData,dateUsed);
 
 
 
@@ -235,7 +277,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
             final ListView listView = (ListView) rootView.findViewById(R.id.listview_news);
 
 
-            listView.setAdapter(mNewsAdapter2);
+           listView.setAdapter(mNewsAdapter);
 
 
 
@@ -252,7 +294,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
 
         return rootView;
     }
-    @Override
+    /*@Override
     public void onResume(){
         super.onResume();
         getLoaderManager().restartLoader(LOADER_ID,null,this);
@@ -302,5 +344,5 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
     public void onLoaderReset(Loader<Cursor> loader) {
 
         mNewsAdapter2.swapCursor(null);
-    }
+    }*/
 }
