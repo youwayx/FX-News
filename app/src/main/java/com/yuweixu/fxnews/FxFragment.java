@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -30,11 +31,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.firebase.client.ChildEventListener;
-import com.firebase.client.DataSnapshot;
-import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.yuweixu.fxnews.Custom.NewsArrayAdapter;
+import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
+import com.nhaarman.listviewanimations.appearance.simple.ScaleInAnimationAdapter;
 import com.yuweixu.fxnews.Custom.NewsCursorAdapter;
 
 import org.apache.http.HttpConnection;
@@ -50,14 +48,26 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by Yuwei on 2014-08-07.
  */
-public class FxFragment extends Fragment{
+//Copyright 2014 Niek Haarman
+//
+//        Licensed under the Apache License, Version 2.0 (the "License");
+//        you may not use this file except in compliance with the License.
+//        You may obtain a copy of the License at
+//
+//        http://www.apache.org/licenses/LICENSE-2.0
+//
+//        Unless required by applicable law or agreed to in writing, software
+//        distributed under the License is distributed on an "AS IS" BASIS,
+//        WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+//        See the License for the specific language governing permissions and
+//        limitations under the License.
 
+public class FxFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+    SimpleCursorAdapter mNewsAdapter;
     NewsCursorAdapter mNewsAdapter2;
     MainActivity mainActivity;
     public int LOADER_ID = 0;
@@ -78,20 +88,16 @@ public class FxFragment extends Fragment{
     static boolean showPanel = true;
     static boolean loadTextViews = false;
     static boolean isToday;
-    Context mContext;
-    Firebase newsBase;
-    ArrayList<Map<String,String>> mData;
-    NewsArrayAdapter mNewsAdapter;
-    static ConcurrentHashMap<String, Object> mMemoryCache;
+    int position;
     public FxFragment(){
         SimpleDateFormat df = new SimpleDateFormat("MM dd, yyyy");
         String rawDate = df.format(new Date());
         todayDate=Utility.formatDateString(rawDate);
         dates = Utility.getWeekDates(todayDate);
-
     }
-    public FxFragment(int position,Context mContext,boolean loadPage){
-        this.mContext= mContext;
+    public FxFragment(int position){
+        this.position = position;
+        Log.v("position",""+position);
         SimpleDateFormat df = new SimpleDateFormat("MM dd, yyyy");
         String rawDate = df.format(new Date());
         todayDate=Utility.formatDateString(rawDate);
@@ -100,62 +106,26 @@ public class FxFragment extends Fragment{
         Bundle args = new Bundle();
         Log.v("testrun",dates[position]);
         args.putString("date", date);
-        loadPage= false;
+        loadPage= true;
         setArguments(args);
+
         if (position ==0){
             isToday = true;
         }
         else{
             isToday = false;
         }
-        Firebase.setAndroidContext(mContext);
-        newsBase = new Firebase("https://fx-news.firebaseio.com/news/"+date);
-        mData = new ArrayList<Map<String, String>>();
-        mMemoryCache = new ConcurrentHashMap<String, Object>();
-        Object thing =mMemoryCache.get("ArrayList");
-        if (thing!= null){
-            mData = (ArrayList<Map<String,String>>) thing;
-
-        }
-        else{
-            mMemoryCache.put("ArrayList",mData);
-        }
-        Log.v("data size right now is",mData.size()+"");
-        if(mData.size()==0) {
-            newsBase.addChildEventListener(new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    Log.v("is this happening", "yes");
-                    Map<String, String> data = (Map<String, String>) dataSnapshot.getValue();
-                    mData.add(data);
-                    mNewsAdapter.notifyDataSetChanged();
-
-                }
-
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
-
-                }
-
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });
-        }
-        mMemoryCache.put("ArrayList",mData);
     }
-
+    /*
+    public static FxFragment create (int position){
+        FxFragment fragment = new FxFragment(position);
+        String date= "";
+        date = fragment.dates[position];
+        Bundle args = new Bundle();
+        args.putString("date", date);
+        fragment.setArguments(args);
+        return fragment;
+    }*/
     public void setLoadPage(boolean b){
         loadPage=b;
     }
@@ -166,10 +136,10 @@ public class FxFragment extends Fragment{
     public void onStart() {
         super.onStart();
         String dateUsed = getArguments().getString("date");
-       FetchNewsFirebase newsTask;
+       FetchNewsTask newsTask;
         if (loadPage){
 
-            newsTask = new FetchNewsFirebase(getActivity(), dateUsed, true);
+            newsTask = new FetchNewsTask(this, getActivity(), dateUsed, true,isToday);
             newsTask.execute();
             Log.v("testrun", "the web has been scraped"+todayDate);
             loadPage=false;
@@ -193,16 +163,16 @@ public class FxFragment extends Fragment{
     public void update (){
         if (loadPage) {
             String dateUsed = getArguments().getString("date");
-            FetchNewsFirebase newsTask;
-            newsTask = new FetchNewsFirebase(getActivity(), dateUsed, true);
+            FetchNewsTask newsTask;
+            newsTask = new FetchNewsTask(this, getActivity(), dateUsed, true,isToday);
             newsTask.execute();
             loadPage=false;
         }
     }
     public void refresh (){
         String dateUsed = getArguments().getString("date");
-        FetchNewsFirebase newsTask;
-        newsTask = new FetchNewsFirebase(getActivity(), dateUsed, true);
+        FetchNewsTask newsTask;
+        newsTask = new FetchNewsTask(this, getActivity(), dateUsed, true,isToday);
         newsTask.execute();
     }
 
@@ -225,47 +195,13 @@ public class FxFragment extends Fragment{
         //getLoaHandler derManager().restartLoader(LOADER_ID,null,this);
         String[] dailyNews = {"4:30am GBP Low Italian Bank Holiday", "5:30am GBP Low French Bank Holiday", "8:30 USD High FOMC Meeting", "9:30 USD High Employment Announcement"};
         List<String> newsList = new ArrayList<String>(Arrays.asList(dailyNews));
-        Log.v("SIZE MDATA",mData.size()+"");
-        String dateUsed = getArguments().getString("date");
 
-
-        if(mData.size()>0) {
-            Log.v("firebasedata", mData.get(0).get("DATE"));
-        }
-
-
-
-         //   mNewsAdapter2 = new NewsCursorAdapter(getActivity(), null,0);
-        /*mNewsAdapter = new SimpleCursorAdapter(
-                getActivity(),
-                R.layout.list_item_news,
-                null,
-                // the column names to use to fill the textviews
-                new String[]{NewsEntry.COLUMN_TIME,
-                        NewsEntry.COLUMN_CURRENCY,
-                        NewsEntry.COLUMN_IMPACT,
-                        NewsEntry.COLUMN_NAME,
-                        NewsEntry.COLUMN_ACTUAL,
-                        NewsEntry.COLUMN_FORECAST,
-                        NewsEntry.COLUMN_PREVIOUS
-
-                },
-                // the textviews to fill with the data pulled from the columns above
-                new int[]{R.id.list_item_time_textview,
-                        R.id.list_item_currency_textview,
-                        R.id.list_item_impact_textview,
-                        R.id.list_item_name_textview,
-                        R.id.list_item_actual_textview,
-                        R.id.list_item_forecast_textview,
-                        R.id.list_item_previous_textview
-                },
-                0
-        );*/
+        mNewsAdapter2 = new NewsCursorAdapter(getActivity(), null,0);
 
 
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
-        mNewsAdapter = new NewsArrayAdapter(mContext,R.layout.list_item_news,mData,dateUsed);
+
 
 
 
@@ -275,9 +211,9 @@ public class FxFragment extends Fragment{
         Log.v("loadTextViews ", loadTextViews+"");
 
             final ListView listView = (ListView) rootView.findViewById(R.id.listview_news);
-
-
-           listView.setAdapter(mNewsAdapter);
+        AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(mNewsAdapter2);
+        animationAdapter.setAbsListView(listView);
+        listView.setAdapter(animationAdapter);
 
 
 
@@ -294,10 +230,13 @@ public class FxFragment extends Fragment{
 
         return rootView;
     }
-    /*@Override
+    @Override
     public void onResume(){
         super.onResume();
-        getLoaderManager().restartLoader(LOADER_ID,null,this);
+
+
+
+        //getLoaderManager().restartLoader(LOADER_ID,null,this);
     }
     @Override
     public void onActivityCreated(Bundle savedInstanceState){
@@ -344,5 +283,5 @@ public class FxFragment extends Fragment{
     public void onLoaderReset(Loader<Cursor> loader) {
 
         mNewsAdapter2.swapCursor(null);
-    }*/
+    }
 }

@@ -1,0 +1,66 @@
+[33mcommit 38a63f1d644f1b1c7053e6faa01a40fc64dc7947[m
+Merge: 5b9fa71 7090199
+Author: xuyuwei <yuwei_xu@outlook.com>
+Date:   Thu Nov 27 14:28:01 2014 -0500
+
+    Merge branch 'master' of https://github.com/xuyuwei/FX-News
+
+[33mcommit 5b9fa71dc165eee9212bb7b904a1c028e9ebc62b[m
+Author: xuyuwei <yuwei_xu@outlook.com>
+Date:   Thu Nov 27 14:27:24 2014 -0500
+
+    fixed loading
+
+[33mcommit 70901997825cfeadd3678f77596d9f1092760587[m
+Author: Yuwei Xu <yuwei_xu@outlook.com>
+Date:   Thu Nov 20 04:56:06 2014 -0500
+
+    Update README.md
+
+[33mcommit 773b0de5b5bbe1ba16bbf29e609e7fe3529b175a[m
+Author: Yuwei Xu <yuwei_xu@outlook.com>
+Date:   Thu Nov 20 04:53:18 2014 -0500
+
+    Create README.md
+
+[33mcommit 50d317b790e962a955b213b7607887354598a402[m
+Author: xuyuwei <yuwei_xu@outlook.com>
+Date:   Fri Oct 31 19:51:50 2014 -0400
+
+    updates
+    
+    hi
+
+[33mcommit 86111b234c4dbc2b768c190b995d37074df5f32f[m
+Author: xuyuwei <yuwei_xu@outlook.com>
+Date:   Sat Oct 25 18:25:41 2014 -0400
+
+    Update 3
+    
+    added launcher icon, fixed refresh
+
+[33mcommit 62ff9c41e4d598824b504cb47807cc0cdcb962eb[m
+Author: xuyuwei <yuwei_xu@outlook.com>
+Date:   Tue Oct 21 13:45:45 2014 -0400
+
+    Update
+    
+    Menu looks nicer
+
+[33mcommit 21410901b3198c169856ba9c1961c3d06e3815be[m
+Author: xuyuwei <yuwei_xu@outlook.com>
+Date:   Wed Oct 1 13:17:53 2014 -0400
+
+    Hi
+
+[33mcommit 659192d8e7ed55b77401e25acc05858c5cc1a054[m
+Author: xuyuwei <yuwei_xu@outlook.com>
+Date:   Wed Oct 1 13:16:30 2014 -0400
+
+    Current Progress updated
+
+[33mcommit 5b52a2816397347ad18af56caa79e0afd29b0c2e[m
+Author: xuyuwei <yuwei_xu@outlook.com>
+Date:   Wed Oct 1 13:12:26 2014 -0400
+
+    :circus_tent: Added .gitattributes & .gitignore files

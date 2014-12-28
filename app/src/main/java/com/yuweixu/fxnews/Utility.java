@@ -40,7 +40,7 @@ public class Utility {
     public static String [] getWeekDates (String date){
         String [] dates = new String [5];
         String month ="", stringDay = "";
-        int day=-1,year = 2014;
+        int day=-1,year = 2015;
         int index= 0;
         for (int i=0; i<20; i++){
             if (date.charAt(i)!= ' '){
@@ -68,13 +68,13 @@ public class Utility {
         }
         for (int i=1; i<5; i++){
             if (day+1 <= monthLengths[monthIndex]){
-                dates[i]=months[monthIndex]+" "+(day+1)+", 2014";
+                dates[i]=months[monthIndex]+" "+(day+1)+", 2015";
             }
             else{
 
                 monthIndex += 1;
                 if (monthIndex>11){
-                    monthIndex = 1;
+                    monthIndex = 0;
                     year++;
                 }
                 day=0;

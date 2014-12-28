@@ -10,6 +10,8 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
+import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -17,6 +19,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +55,7 @@ public class MainActivity extends ActionBarActivity {
         android.app.ActionBar actionBar = getActionBar();
         actionBar.setTitle(s);
         startActivity(new Intent(MainActivity.this, ViewPagerActivity.class));
+
         //this.deleteDatabase("fxnews.db");
 
 

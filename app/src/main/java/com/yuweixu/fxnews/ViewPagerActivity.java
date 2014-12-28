@@ -5,10 +5,13 @@ import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ActionBarDrawerToggle;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
@@ -20,27 +23,35 @@ import android.support.v4.widget.DrawerLayout;
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.view.animation.Interpolator;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+
 import com.yuweixu.fxnews.Custom.FixedSpeedScroller;
-import com.yuweixu.fxnews.Custom.NewsArrayAdapter;
 import com.yuweixu.fxnews.Custom.TypeFaceSpan;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -52,7 +63,6 @@ public class ViewPagerActivity extends FragmentActivity{
     private DrawerLayout mDrawerLayout;
     private ListView mDrawerList;
     private ActionBarDrawerToggle mDrawerToggle;
-
     /**
      * The pager widget, which handles animation and allows swiping horizontally to access previous
      * and next wizard steps.
@@ -62,55 +72,19 @@ public class ViewPagerActivity extends FragmentActivity{
     private PagerAdapter mPagerAdapter;
     static FxFragment [] fragments;
     static boolean dontLoadList;
-    Context context = this;
+    SharedPreferences prefs;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-
-        //getActionBar().hide();
-//        Firebase.setAndroidContext(this);
-//        Firebase rootRef = new Firebase("https://fx-news.firebaseio.com/");
-//        Firebase newsRef = rootRef.child ("news");
-//        Map<String, String> newsData = new HashMap<String, String>();
-//        newsData.put("currency","USD");
-//        newsData.put("name","FOMC meeting minutes");
-//
-//        newsRef.addChildEventListener(new ChildEventListener() {
-//            @Override
-//            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onCancelled(FirebaseError firebaseError) {
-//
-//            }
-//
-//            // Retrieve new posts as they are added to Firebase
-//            @Override
-//            public void onChildAdded(DataSnapshot snapshot, String previousChildName) {
-//                Map<String,String> node = (Map <String,String>) snapshot.child("October 30, 2014").child("Fed Chair Yellen Speaks").getValue();
-//                Log.v("firebase",node.get("currency"));
-//            }
-//
-//            @Override
-//            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-//
-//            }
-//
-//            @Override
-//            public void onChildRemoved(DataSnapshot snapshot) {
-//
-//            }
-//            //... ChildEventListener also defines onChildChanged, onChildRemoved,
-//            //    onChildMoved and onCanceled, covered in later sections.
-//        });
-        //newsRef.child("Nov 2, 2014").setValue(newsData);
         Log.v("firebase", "hi");
 
 
         setContentView(R.layout.view_pager);
+        prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        SimpleDateFormat df = new SimpleDateFormat("MM dd, yyyy");
+        String rawDate = df.format(new Date());
+        prefs.edit().putString("date",rawDate);
         loadPages = new boolean [5];
         for (int i=0; i<5; i++){
             loadPages[i]=true;
@@ -120,7 +94,7 @@ public class ViewPagerActivity extends FragmentActivity{
         mPagerAdapter = new ScreenSlidePagerAdapter(getSupportFragmentManager());
         mPager.setAdapter(mPagerAdapter);
         fragments = new FxFragment[5];
-
+        mPager.setOffscreenPageLimit(4);
         mPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             int positionCurrent;
             //boolean dontLoadList;
@@ -173,11 +147,12 @@ public class ViewPagerActivity extends FragmentActivity{
 
         mDrawerLayout = (DrawerLayout) findViewById(R.id.drawer_layout);
         mDrawerList = (ListView) findViewById(R.id.left_drawer);
-        String [] drawerTitles = {"Main", "About"};
+        String [] drawerTitles = {"About"};
         // Set the adapter for the list view
         final Context context = this;
         mDrawerList.setAdapter(new ArrayAdapter<String>(this,
                 R.layout.drawer_list_item,drawerTitles));
+        mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
         mDrawerToggle = new ActionBarDrawerToggle(
                 this,                  /* host Activity */
                 mDrawerLayout,         /* DrawerLayout object */
@@ -193,7 +168,7 @@ public class ViewPagerActivity extends FragmentActivity{
                 s.setSpan(new TypeFaceSpan(context, "Roboto-Thin.ttf"), 0, s.length(),
                         Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
 
-// Update the action bar title with the TypefaceSpan instance
+            // Update the action bar title with the TypefaceSpan instance
                 ActionBar actionBar = getActionBar();
                 actionBar.setTitle(s);
 
@@ -218,10 +193,6 @@ public class ViewPagerActivity extends FragmentActivity{
 
         LayoutInflater inflator = LayoutInflater.from(this);
         View v = inflator.inflate(R.layout.title_textview, null);
-
-
-//assign the view to the actionbar
-        this.getActionBar().setCustomView(v);
         */
         mDrawerLayout.setDrawerListener(mDrawerToggle);
         getActionBar().setDisplayHomeAsUpEnabled(true);
@@ -235,8 +206,30 @@ public class ViewPagerActivity extends FragmentActivity{
         actionBar.setTitle(s);
         // Set the list's click listener
        //mDrawerList.setOnItemClickListener(new DrawerItemClickListener());
+        //stopLoading();
 
     }
+    void stopLoading(){
+        RelativeLayout bar = (RelativeLayout)findViewById(R.id.progress_container);
+        bar.setVisibility(View.GONE);
+
+
+    }
+    void setFragmentsVisible(){
+        FxFragment f = fragments[0];
+        findViewById(R.id.fragment_container).setVisibility(View.VISIBLE);
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+        SimpleDateFormat df = new SimpleDateFormat("MM dd, yyyy");
+        String rawDate = df.format(new Date());
+        String date = prefs.getString("date","none");
+        if (date.equals("none") || !rawDate.equals(date)){
+            fragments= new FxFragment[5];
+        }
+    }
+
     @Override
     protected void onPostCreate(Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
@@ -265,6 +258,7 @@ public class ViewPagerActivity extends FragmentActivity{
      * A simple pager adapter that represents 5 ScreenSlidePageFragment objects, in
      * sequence.
      */
+
     private class ScreenSlidePagerAdapter extends FragmentStatePagerAdapter {
         public ScreenSlidePagerAdapter(FragmentManager fm) {
             super(fm);
@@ -272,24 +266,20 @@ public class ViewPagerActivity extends FragmentActivity{
 
         @Override
         public android.support.v4.app.Fragment getItem(int position) {
-            Log.v("loadpages", Arrays.toString(loadPages));
-            /*if(loadPages[position] == true){
-                return new FxFragment(position,context,false);
-            }
-            else{
-                return new FxFragment(position,context,false);
-            }*/
 
+            Log.v("loadpages", Arrays.toString(loadPages));
+            //return new FxFragment(position);
 
 
             if (fragments[position]==null){
-                fragments[position]=new FxFragment(position,context,false);
 
+                fragments[position]=new FxFragment(position);
+                //setFragmentsVisible();
                 Log.v("this is being called for",position+"");
                 return fragments[position];
             }
             else{
-                fragments[position].setLoadPage(false);
+
                 return fragments[position];
             }
 
@@ -305,8 +295,57 @@ public class ViewPagerActivity extends FragmentActivity{
             return NUM_PAGES;
         }
     }
+
     @Override
     public void onBackPressed(){
 
     }
+    public void setStatusBarColor(View statusBar,int color){
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+            Window w = getWindow();
+            //status bar height
+            int actionBarHeight = getActionBarHeight();
+            int statusBarHeight = getStatusBarHeight();
+            w.setFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS, WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
+            Log.v("actionbar, statusbar", actionBarHeight + " " + statusBarHeight);
+            //action bar height
+            statusBar.getLayoutParams().height = actionBarHeight + statusBarHeight;
+            statusBar.setBackgroundColor(color);
+        }
+    }
+    public int getActionBarHeight() {
+        int actionBarHeight = 0;
+        TypedValue tv = new TypedValue();
+        if (getTheme().resolveAttribute(android.R.attr.actionBarSize, tv, true))
+        {
+            actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data,getResources().getDisplayMetrics());
+        }
+        return actionBarHeight;
+    }
+
+    public int getStatusBarHeight() {
+        int result = 0;
+        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
+        if (resourceId > 0) {
+            result = getResources().getDimensionPixelSize(resourceId);
+        }
+        return result;
+    }
+
+    class DrawerItemClickListener implements ListView.OnItemClickListener {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            Context context = parent.getContext();
+            CharSequence text = "Created By Yuwei Xu";
+            int duration = Toast.LENGTH_LONG;
+
+            Toast toast = Toast.makeText(context, text, duration);
+            toast.show();
+            mDrawerLayout.closeDrawer(mDrawerList);
+            //selectItem(position);
+        }
+
+    }
 }
+
+

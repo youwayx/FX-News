@@ -1,0 +1,8 @@
+MSYS-1.0.17 Build:2011-04-24 23:39
+Exception: STATUS_ACCESS_VIOLATION at eip=00000000
+eax=685737DC ebx=685738E4 ecx=0001B008 edx=000000CC esi=00000000 edi=685700D4
+ebp=0028FECC esp=0028FEB0 program=c:\RailsInstaller\DevKit\bin\lessecho.exe
+cs=0023 ds=002B es=002B fs=0053 gs=002B ss=002B
+Stack trace:
+Frame     Function  Args
+End of stack trace
