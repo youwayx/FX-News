@@ -28,7 +28,7 @@ public class NewsCursorAdapter extends CursorAdapter {
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
 
-        View view = LayoutInflater.from(context).inflate(R.layout.list_item_news, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.news_list_item, parent, false);
         ViewHolder viewHolder = new ViewHolder(view);
         view.setTag(viewHolder);
         /*TextView impactView =(TextView) view.findViewById(R.id.list_item_impact_textview);
@@ -75,12 +75,15 @@ public class NewsCursorAdapter extends CursorAdapter {
             //FontTextView nameView= (FontTextView) view.findViewById(R.id.list_item_name_textview);
             viewHolder.nameView.setText(cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_NAME)).toString());
             //FontTextView forecastView = (FontTextView) view.findViewById(R.id.list_item_forecast_textview);
-            viewHolder.forecastView.setText(cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_FORECAST)).toString());
+            viewHolder.forecastView.setText("Forecast: "+cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_FORECAST)).toString());
             //FontTextView impactView = (FontTextView) view.findViewById(R.id.list_item_impact_textview);
             if (viewHolder.impactView== null){
                 Log.v("this is causing", "the null");
             }
             String impact = cursor.getString(4);
+            if (impact.equals("Medium")){
+                impact = "Med";
+            }
             viewHolder.impactView.setText(impact);
             /*if (impact!=null && impact.equals("Low"))
             {   q
@@ -96,9 +99,9 @@ public class NewsCursorAdapter extends CursorAdapter {
             // FontTextView timeView = (FontTextView) view.findViewById(R.id.list_item_time_textview);
             viewHolder.timeView.setText(cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_TIME)).toString());
             //FontTextView previousView = (FontTextView) view.findViewById(R.id.list_item_previous_textview);
-            viewHolder.previousView.setText(cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_PREVIOUS)).toString());
+            viewHolder.previousView.setText("Previous: "+cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_PREVIOUS)).toString());
             //FontTextView actualView = (FontTextView) view.findViewById(R.id.list_item_actual_textview);
-            viewHolder.actualView.setText(cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_ACTUAL)));
+            viewHolder.actualView.setText("Actual: "+ cursor.getString(cursor.getColumnIndex(NewsEntry.COLUMN_ACTUAL)));
         }
     }
     /*@Override

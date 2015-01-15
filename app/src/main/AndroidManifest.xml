@@ -7,9 +7,9 @@
         android:allowBackup="true"
         android:icon="@drawable/fxnews"
         android:label="FX News"
-        android:theme="@style/FxActionTheme" >
+        android:theme="@style/AppTheme" >
         <activity
-            android:name=".MainActivity"
+            android:name=".ViewPagerActivity"
             android:screenOrientation="portrait"
             >
             <intent-filter>
@@ -18,11 +18,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ViewPagerActivity"
-            android:screenOrientation="portrait"
-            >
 
-        </activity>
         <provider
             android:authorities="com.yuweixu.fxnews"
             android:name=".NewsProvider" />

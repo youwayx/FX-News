@@ -5,4 +5,14 @@
     <color name="yellow">#fffffe1d</color>
     <color name = "navy">#00006B</color>
     <color name = "white"> #FFFFFf</color>
+    <color name = "black">#000000</color>
+    <color name = "grey">#9E9E9E</color>
+    <color name = "dark_grey">#616161</color>
+    <color name="myPrimaryColor">#00006B</color>
+    <color name="myPrimaryDarkColor">#00006B</color>
+    <color name="myAccentColor">#00006B</color>
+    <color name="myDrawerBackground">#F2F2F2</color>
+    <color name="myWindowBackground">#DEDEDE</color>
+    <color name="myTextPrimaryColor">#FFFFFF</color>
+    <color name="myNavigationColor">#000000</color>
 </resources>
