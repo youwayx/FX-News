@@ -4,6 +4,7 @@
     <color name="orange">#ffff8f3c</color>
     <color name="yellow">#fffffe1d</color>
     <color name = "navy">#00006B</color>
+    <color name = "light_navy">#303F9F</color>
     <color name = "white"> #FFFFFf</color>
     <color name = "black">#000000</color>
     <color name = "grey">#9E9E9E</color>

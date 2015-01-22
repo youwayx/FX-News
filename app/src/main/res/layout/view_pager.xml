@@ -39,12 +39,27 @@
 
             android:gravity= "center"
             android:id= "@+id/progress_container">
+            <!--<com.melnykov.fab.FloatingActionButton-->
+                <!--xmlns:fab="http://schemas.android.com/apk/res-auto"-->
+                <!--android:id="@+id/open_browser_button"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+               <!---->
+                <!--android:layout_alignParentBottom="true"-->
+                <!--android:layout_alignParentRight="true"-->
+                <!--android:layout_margin="16dp"-->
+                <!--android:src="@drawable/ic_action_forward"-->
+                <!--fab:fab_colorNormal="@color/navy"-->
+                <!--fab:fab_colorPressed="@color/light_navy"-->
+                <!--fab:fab_colorRipple="@color/light_navy" />-->
             <ProgressBar
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id= "@+id/progress_bar"
 
                 />
+
         </RelativeLayout>
         <fragment
             android:id="@+id/fragment_drawer"

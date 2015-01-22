@@ -47,6 +47,7 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
+import com.melnykov.fab.FloatingActionButton;
 import com.yuweixu.fxnews.Custom.FixedSpeedScroller;
 import com.yuweixu.fxnews.Custom.TypeFaceSpan;
 import com.yuweixu.fxnews.Material.NavigationDrawerCallbacks;
@@ -133,6 +134,9 @@ public class ViewPagerActivity extends ActionBarActivity implements NavigationDr
             }
         });
     }
+//    public FloatingActionButton getButton(){
+//        return ((FloatingActionButton)findViewById(R.id.open_browser_button));
+//    }
     void setAdapter(){
         mPager.setAdapter(mPagerAdapter);
     }

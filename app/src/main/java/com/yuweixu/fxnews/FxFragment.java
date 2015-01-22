@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.melnykov.fab.FloatingActionButton;
 import com.nhaarman.listviewanimations.appearance.simple.AlphaInAnimationAdapter;
 import com.nhaarman.listviewanimations.appearance.simple.ScaleInAnimationAdapter;
 import com.yuweixu.fxnews.Custom.NewsCursorAdapter;
@@ -69,7 +70,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
         NewsEntry.COLUMN_PREVIOUS};
     public boolean loadPage;
     public static String todayDate;
-    public static ViewPagerActivity activity;
+    public static ViewPagerActivity mActivity;
     static boolean showPanel = true;
     static boolean loadTextViews = false;
     static boolean isToday;
@@ -124,6 +125,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         //getLoaHandler derManager().restartLoader(LOADER_ID,null,this);
+        mActivity = (ViewPagerActivity)getActivity();
         String[] dailyNews = {"4:30am GBP Low Italian Bank Holiday", "5:30am GBP Low French Bank Holiday", "8:30 USD High FOMC Meeting", "9:30 USD High Employment Announcement"};
         List<String> newsList = new ArrayList<String>(Arrays.asList(dailyNews));
 
@@ -142,9 +144,12 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
         Log.v("loadTextViews ", loadTextViews+"");
 
             final ListView listView = (ListView) rootView.findViewById(R.id.listview_news);
+//        FloatingActionButton fab = mActivity.getButton();
+//        fab.attachToListView(listView);
         AlphaInAnimationAdapter animationAdapter = new AlphaInAnimationAdapter(mNewsAdapter2);
         animationAdapter.setAbsListView(listView);
         listView.setAdapter(animationAdapter);
+
 
 
 
@@ -199,7 +204,7 @@ public class FxFragment extends Fragment implements LoaderManager.LoaderCallback
                 columns,
                 selection,
                 selectionArgs,
-                null
+                "time ASC"
                 );
     }
 

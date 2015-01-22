@@ -16,13 +16,6 @@
         <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\firebase-client-jvm-1.1.1-4c236f12a945ec1d9026a97b3effc57d079d1d88.jar" />
     </item>
     <item
-        jar="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
-        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-cb7b0deb912f54dba7c40517e4b5217d5da35cd0.jar" />
-    </item>
-    <item
         jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.2.2\285cb9c666f0f0f3dd8a1be04e1f457eb7b15113\jackson-annotations-2.2.2.jar"
         jumboMode="false"
         revision="19.1.0"
@@ -37,6 +30,13 @@
         <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\firebase-client-android-1.1.1-c5752022d19bd74896d369542329a9ee1a87b37a.jar" />
     </item>
     <item
+        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
+        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\jackson-core-2.2.2-db965e2a2ee8959d18e6c30cff5ca8f9976e38d9.jar" />
+    </item>
+    <item
         jar="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\exploded-aar\com.android.support\cardview-v7\21.0.3\classes.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -44,11 +44,60 @@
         <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\classes-f41f2b9e94a1b7b4033274acf72d2e264bfbc9d2.jar" />
     </item>
     <item
-        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
+        jar="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\exploded-aar\com.nhaarman.listviewanimations\lib-core\3.1.0\classes.jar"
         jumboMode="false"
         revision="21.1.2"
-        sha1="d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b">
-        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\jackson-core-2.2.2-db965e2a2ee8959d18e6c30cff5ca8f9976e38d9.jar" />
+        sha1="acf66033b1418ccf9e15c8e77750981e4809c4ea">
+        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\classes-0bb93f24807627c3d2be610ced5c413c68b7d106.jar" />
+    </item>
+    <item
+        jar="C:\Users\Yuwei\Android SDK\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
+        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-ab0b11c047688dbe96105035b0ecc8a57ac64a20.jar" />
+    </item>
+    <item
+        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.firebase\tubesock\0.0.9\c1f56c0f1a75ced73ad50c47fb3f702009e3960a\tubesock-0.0.9.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="c1f56c0f1a75ced73ad50c47fb3f702009e3960a">
+        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\tubesock-0.0.9-b767a1fbbd256bdd95b4f97096e4e89fa24fa6a8.jar" />
+    </item>
+    <item
+        jar="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\exploded-aar\com.melnykov\floatingactionbutton\1.1.0\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="ee9ae2b87d57a33a7381c75d54db12bdf2995656">
+        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\classes-f7a26542b70865b40bf0847b1c5cd9238308cf4f.jar" />
+    </item>
+    <item
+        jar="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
+        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\classes-5af3383cb49eb972e3699ddb23c6a11ab4a301ab.jar" />
+    </item>
+    <item
+        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"
+        jumboMode="false"
+        revision="19.1.0"
+        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
+        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\jackson-databind-2.2.2-24c20a37448e8824fd3abd23dda5e242266aaf74.jar" />
+    </item>
+    <item
+        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
+        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\library-2.4.0-5d4a08c5b2f6e6ab756c8f9febf1cdc4821d809a.jar" />
+    </item>
+    <item
+        jar="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\exploded-aar\com.android.support\support-v4\21.0.3\libs\internal_impl-21.0.3.jar"
+        jumboMode="false"
+        revision="21.1.2"
+        sha1="01ec05bfbafcc07646ba813000bf2ef11742dd03">
+        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\internal_impl-21.0.3-cb7b0deb912f54dba7c40517e4b5217d5da35cd0.jar" />
     </item>
     <item
         jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.2.2\d20be6a5ddd6f8cfd36ebf6dea329873a1c41f1b\jackson-core-2.2.2.jar"
@@ -81,13 +130,6 @@
     <item
         jar="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\exploded-aar\com.nhaarman.listviewanimations\lib-core\3.1.0\classes.jar"
         jumboMode="false"
-        revision="21.1.2"
-        sha1="acf66033b1418ccf9e15c8e77750981e4809c4ea">
-        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\classes-0bb93f24807627c3d2be610ced5c413c68b7d106.jar" />
-    </item>
-    <item
-        jar="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\exploded-aar\com.nhaarman.listviewanimations\lib-core\3.1.0\classes.jar"
-        jumboMode="false"
         revision="19.1.0"
         sha1="acf66033b1418ccf9e15c8e77750981e4809c4ea">
         <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\classes-0bb93f24807627c3d2be610ced5c413c68b7d106.jar" />
@@ -100,20 +142,6 @@
         <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\classes-92d59c41b133f7364f2fbd95fceb6d45222defb2.jar" />
     </item>
     <item
-        jar="C:\Users\Yuwei\Android SDK\sdk\extras\android\m2repository\com\android\support\support-annotations\21.0.3\support-annotations-21.0.3.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="4b74cefe1f0c1b819e7260c8627a14674e37fd35">
-        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\support-annotations-21.0.3-ab0b11c047688dbe96105035b0ecc8a57ac64a20.jar" />
-    </item>
-    <item
-        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.firebase\tubesock\0.0.9\c1f56c0f1a75ced73ad50c47fb3f702009e3960a\tubesock-0.0.9.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="c1f56c0f1a75ced73ad50c47fb3f702009e3960a">
-        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\tubesock-0.0.9-b767a1fbbd256bdd95b4f97096e4e89fa24fa6a8.jar" />
-    </item>
-    <item
         jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.2.2\285cb9c666f0f0f3dd8a1be04e1f457eb7b15113\jackson-annotations-2.2.2.jar"
         jumboMode="false"
         revision="21.1.2"
@@ -121,32 +149,11 @@
         <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\jackson-annotations-2.2.2-4b16baa1bd13abc6f623e14d0d0068a2b1582567.jar" />
     </item>
     <item
-        jar="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\21.0.3\classes.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="81d42bf983a8741f4888a6e333e454e4a5e0eeb7">
-        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\classes-5af3383cb49eb972e3699ddb23c6a11ab4a301ab.jar" />
-    </item>
-    <item
         jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"
         jumboMode="false"
         revision="21.1.2"
         sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
         <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\jackson-databind-2.2.2-24c20a37448e8824fd3abd23dda5e242266aaf74.jar" />
-    </item>
-    <item
-        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.2.2\3c8f6018eaa72d43b261181e801e6f8676c16ef6\jackson-databind-2.2.2.jar"
-        jumboMode="false"
-        revision="19.1.0"
-        sha1="3c8f6018eaa72d43b261181e801e6f8676c16ef6">
-        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\jackson-databind-2.2.2-24c20a37448e8824fd3abd23dda5e242266aaf74.jar" />
-    </item>
-    <item
-        jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
-        jumboMode="false"
-        revision="21.1.2"
-        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb">
-        <dex dex="C:\Users\Yuwei\Desktop\FX-News-master\app\build\intermediates\pre-dexed\debug\library-2.4.0-5d4a08c5b2f6e6ab756c8f9febf1cdc4821d809a.jar" />
     </item>
     <item
         jar="C:\Users\Yuwei\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
