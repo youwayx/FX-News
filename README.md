@@ -17,3 +17,6 @@ Screenshots:
 
 Download it from the Playstore:
 https://play.google.com/store/apps/details?id=com.yuweixu.fxnews
+
+View API that can complement this app:
+https://github.com/xuyuwei/Forex-Calendar-API
